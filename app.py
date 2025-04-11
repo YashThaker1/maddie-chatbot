@@ -133,9 +133,9 @@ elif not st.session_state.question_type:
         st.session_state.question_type_prompt = True
     cols = st.columns(3)
     if cols[0].button("Behavioral"): st.session_state.question_type = "behavioral"; st.experimental_rerun()
-    st.stop()
+        st.stop()
 if cols[1].button("Technical"): st.session_state.question_type = "technical"; st.experimental_rerun()
-    st.stop()
+        st.stop()
 if cols[2].button("Both"): st.session_state.question_type = "both"; st.experimental_rerun()
 
 st.stop()
