@@ -115,17 +115,17 @@ elif not st.session_state.question_count:
         st.session_state.question_count_prompt = True
     cols = st.columns(3)
     if cols[0].button("6 Questions"):
-    st.session_state.question_count = 6
-    st.session_state.rerun_after_question_count = True
-    st.stop()
+        st.session_state.question_count = 6
+        st.session_state.rerun_after_question_count = True
+        st.stop()
     if cols[1].button("12 Questions"):
-    st.session_state.question_count = 12
-    st.session_state.rerun_after_question_count = True
-    st.stop()
+        st.session_state.question_count = 12
+        st.session_state.rerun_after_question_count = True
+        st.stop()
     if cols[2].button("20 Questions"):
-    st.session_state.question_count = 20
-    st.session_state.rerun_after_question_count = True
-    st.stop()
+        st.session_state.question_count = 20
+        st.session_state.rerun_after_question_count = True
+        st.stop()
 
 elif not st.session_state.question_type:
     if not st.session_state.question_type_prompt:
