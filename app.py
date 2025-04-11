@@ -5,8 +5,8 @@ import time
 from dotenv import load_dotenv
 
 # Load OpenAI API key
-load_dotenv()
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
 
 # Page config
 st.set_page_config(page_title="Maddie Interview Coach", page_icon="🤍", layout="centered")
@@ -108,10 +108,9 @@ if not st.session_state.name:
     with st.form("name_form"):
         name_input = st.text_input("Your name:", placeholder="Enter your name...")
         submitted = st.form_submit_button("Next")
-
-    if submitted and name_input.strip():
-        st.session_state.name = name_input.strip().title()
-        st.experimental_rerun()
+        if submitted and name_input.strip():
+            st.session_state.name = name_input.strip().title()
+            st.experimental_rerun()
 
 elif not st.session_state.question_count:
     if not st.session_state.question_count_prompt:
@@ -166,7 +165,8 @@ else:
     current_q = questions[index]
 
     st.markdown(f"#### 🧑‍💼 Question {index + 1} of {total_qs}")
-    st.markdown(f"<div class='question-box'>{current_q}</div>", unsafe_allow_html=True)
+    maddie_says(f"Here's your next interview question:\n\n{current_q}")
+
 
     st.session_state.user_answer = st.text_area("🗣️ Your answer:", value=st.session_state.user_answer, height=150)
 
