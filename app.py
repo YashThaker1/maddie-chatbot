@@ -197,7 +197,6 @@ else:
                     st.session_state.user_answer = ""
                     st.experimental_rerun()
             else:
-
                 if st.button("✅ Finish Interview"):
                     st.session_state.interview_complete = True
                     st.experimental_rerun()
