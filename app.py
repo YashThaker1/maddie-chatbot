@@ -212,9 +212,11 @@ if st.session_state.interview_complete:
 if st.session_state.get("rerun_after_question_count"):
     st.session_state.rerun_after_question_count = False
     st.experimental_rerun()
+    st.stop()
 if st.session_state.get("rerun_after_name"):
     st.session_state.rerun_after_name = False
     st.experimental_rerun()
+    st.stop()
 
 if st.session_state.get("rerun_after_job"):
     with st.spinner("Maddie is reviewing the job description..."):
@@ -244,3 +246,4 @@ Questions:"""
         st.session_state.rerun_after_job = False
         st.success("✅ Questions are ready! Let's begin.")
         st.experimental_rerun()
+        st.stop()
