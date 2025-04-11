@@ -132,26 +132,15 @@ elif not st.session_state.question_type:
         maddie_says("Would you like to start with behavioral questions, technical ones, or a mix of both?")
         st.session_state.question_type_prompt = True
     cols = st.columns(3)
-    if cols[0].button("Behavioral"): st.session_state.question_type = "behavioral"; st.experimental_rerun()
-        st.stop()
-    if cols[1].button("Technical"): st.session_state.question_type = "technical"; st.experimental_rerun()
-        st.stop()
-    if cols[2].button("Both"): st.session_state.question_type = "both"; st.experimental_rerun()
-        st.stop()
-
-elif not st.session_state.job_description:
-    if not st.session_state.job_description_prompt:
-        maddie_says(f"Awesome, {st.session_state.name}! Please paste the job description below, and I’ll pull up your questions 📄")
-        st.session_state.job_description_prompt = True
-
-    with st.form("job_description_form"):
-        job_input = st.text_area("Paste the job description:", placeholder="Paste or write the job description here...")
-        submitted = st.form_submit_button("Next")
-
-        if submitted and job_input.strip():
-            st.session_state.job_description = job_input.strip()
-            st.session_state.rerun_after_job = True
-            st.stop()
+    if cols[0].button("Behavioral"):
+        st.session_state.question_type = "behavioral"
+        st.experimental_rerun()
+    if cols[1].button("Technical"):
+        st.session_state.question_type = "technical"
+        st.experimental_rerun()
+    if cols[2].button("Both"):
+        st.session_state.question_type = "both"
+        st.experimental_rerun()
 
 else:
     index = st.session_state.question_index
