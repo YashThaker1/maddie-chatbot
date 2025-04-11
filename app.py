@@ -197,9 +197,7 @@ else:
                     st.session_state.user_answer = ""
                     st.experimental_rerun()
             else:
-                if st.button("✅ Finish Interview"):
-                    st.session_state.interview_complete = True
-                    st.experimental_rerun()
+
     if st.button("✅ Finish Interview"):
         st.session_state.interview_complete = True
         st.experimental_rerun()
@@ -225,26 +223,25 @@ if st.session_state.get("rerun_after_job"):
         n = st.session_state.question_count
         if q_type == "both":
             n1, n2 = n // 2, n - (n // 2)
-            prompt = f"You're an expert interviewer. Based on the job description below, write {n1} behavioral and {n2} technical interview questions that progressively increase in difficulty.
+            prompt = f"""You're an expert interviewer. Based on the job description below, write {n1} behavioral and {n2} technical interview questions that progressively increase in difficulty.
 
 Job Description:
 {st.session_state.job_description}
 
-Questions:"
+Questions:"""
         else:
-            prompt = f"You're an expert interviewer. Based on the job description below, write {n} {q_type} interview questions.
+            prompt = f"""You're an expert interviewer. Based on the job description below, write {n} {q_type} interview questions.
 
 Job Description:
 {st.session_state.job_description}
 
-Questions:"
+Questions:"""
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
         )
         questions_text = response.choices[0].message.content
-        st.session_state.questions = [q.strip("- ").strip() for q in questions_text.split("
-") if q.strip()]
+        st.session_state.questions = [q.strip('- ').strip() for q in questions_text.splitlines() if q.strip()]
         st.session_state.rerun_after_job = False
         st.success("✅ Questions are ready! Let's begin.")
         st.experimental_rerun()
