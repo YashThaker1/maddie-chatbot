@@ -114,9 +114,18 @@ elif not st.session_state.question_count:
         maddie_says(f"Great to meet you, {st.session_state.name}! How many questions would you like to practice today?")
         st.session_state.question_count_prompt = True
     cols = st.columns(3)
-    if cols[0].button("6 Questions"): st.session_state.question_count = 6; st.experimental_rerun()
-    if cols[1].button("12 Questions"): st.session_state.question_count = 12; st.experimental_rerun()
-    if cols[2].button("20 Questions"): st.session_state.question_count = 20; st.experimental_rerun()
+    if cols[0].button("6 Questions"):
+    st.session_state.question_count = 6
+    st.session_state.rerun_after_question_count = True
+    st.stop()
+    if cols[1].button("12 Questions"):
+    st.session_state.question_count = 12
+    st.session_state.rerun_after_question_count = True
+    st.stop()
+    if cols[2].button("20 Questions"):
+    st.session_state.question_count = 20
+    st.session_state.rerun_after_question_count = True
+    st.stop()
 
 elif not st.session_state.question_type:
     if not st.session_state.question_type_prompt:
@@ -196,6 +205,9 @@ if st.session_state.interview_complete:
         st.markdown("---")
 
 # ✅ Safe rerun triggers placed at the base level
+if st.session_state.get("rerun_after_question_count"):
+    st.session_state.rerun_after_question_count = False
+    st.experimental_rerun()
 if st.session_state.get("rerun_after_name"):
     st.session_state.rerun_after_name = False
     st.experimental_rerun()
