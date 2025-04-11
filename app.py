@@ -33,24 +33,21 @@ st.markdown("""
         color: #1f1f1f;
     }
     .chat-bubble {
-    background-color: #ede9fe;
-    border-radius: 12px;
-    padding: 1rem;
-    margin: 1rem 0;
-    display: flex;
-    gap: 1rem;
-    align-items: center; /* ✅ lock avatar vertical alignment */
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
-}
-.chat-bubble img {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-
-}
+        background-color: #ede9fe;
+        border-radius: 12px;
+        padding: 1rem;
+        margin: 1rem 0;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+    }
+    .chat-bubble img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
     .chat-text {
         font-size: 1rem;
         line-height: 1.5;
@@ -104,13 +101,12 @@ if not st.session_state.name:
         maddie_says("Hi, I'm Maddie, your personal interview coach...")
         st.session_state.name_prompt_shown = True
 
-    # This should NOT be inside the prompt_shown check
     with st.form("name_form"):
         name_input = st.text_input("Your name:", placeholder="Enter your name...")
         submitted = st.form_submit_button("Next")
         if submitted and name_input.strip():
             st.session_state.name = name_input.strip().title()
-            st.experimental_rerun()
+            st.session_state.rerun_after_name = True
 
 elif not st.session_state.question_count:
     if not st.session_state.question_count_prompt:
@@ -139,24 +135,9 @@ elif not st.session_state.job_description:
         job_input = st.text_area("Paste the job description:", placeholder="Paste or write the job description here...")
         submitted = st.form_submit_button("Next")
 
-    if submitted and job_input.strip():
-        st.session_state.job_description = job_input.strip()
-        with st.spinner("Maddie is reviewing the job description..."):
-            q_type = st.session_state.question_type
-            n = st.session_state.question_count
-            if q_type == "both":
-                n1, n2 = n // 2, n - (n // 2)
-                prompt = f"You're an expert interviewer. Based on the job description below, write {n1} behavioral and {n2} technical interview questions that progressively increase in difficulty.\n\nJob Description:\n{st.session_state.job_description}\n\nQuestions:"
-            else:
-                prompt = f"You're an expert interviewer. Based on the job description below, write {n} {q_type} interview questions.\n\nJob Description:\n{st.session_state.job_description}\n\nQuestions:"
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": prompt}],
-            )
-            questions_text = response.choices[0].message.content
-            st.session_state.questions = [q.strip("- ").strip() for q in questions_text.split("\n") if q.strip()]
-            st.success("✅ Questions are ready! Let's begin.")
-            st.experimental_rerun()
+        if submitted and job_input.strip():
+            st.session_state.job_description = job_input.strip()
+            st.session_state.rerun_after_job = True
 
 else:
     index = st.session_state.question_index
@@ -166,7 +147,6 @@ else:
 
     st.markdown(f"#### 🧑‍💼 Question {index + 1} of {total_qs}")
     maddie_says(f"Here's your next interview question:\n\n{current_q}")
-
 
     st.session_state.user_answer = st.text_area("🗣️ Your answer:", value=st.session_state.user_answer, height=150)
 
@@ -212,3 +192,27 @@ if st.session_state.interview_complete:
         st.markdown(f"**Your Answer:** {qa['answer']}")
         st.markdown(f"**Maddie's Feedback:** {qa['feedback']}")
         st.markdown("---")
+
+# ✅ Safe rerun triggers placed at the base level
+if st.session_state.get("rerun_after_name"):
+    st.session_state.rerun_after_name = False
+    st.experimental_rerun()
+
+if st.session_state.get("rerun_after_job"):
+    with st.spinner("Maddie is reviewing the job description..."):
+        q_type = st.session_state.question_type
+        n = st.session_state.question_count
+        if q_type == "both":
+            n1, n2 = n // 2, n - (n // 2)
+            prompt = f"You're an expert interviewer. Based on the job description below, write {n1} behavioral and {n2} technical interview questions that progressively increase in difficulty.\n\nJob Description:\n{st.session_state.job_description}\n\nQuestions:"
+        else:
+            prompt = f"You're an expert interviewer. Based on the job description below, write {n} {q_type} interview questions.\n\nJob Description:\n{st.session_state.job_description}\n\nQuestions:"
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+        )
+        questions_text = response.choices[0].message.content
+        st.session_state.questions = [q.strip("- ").strip() for q in questions_text.split("\n") if q.strip()]
+        st.session_state.rerun_after_job = False
+        st.success("✅ Questions are ready! Let's begin.")
+        st.experimental_rerun()
