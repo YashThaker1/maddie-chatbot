@@ -115,17 +115,17 @@ elif not st.session_state.question_count:
         st.session_state.question_count_prompt = True
     cols = st.columns(3)
     if cols[0].button("6 Questions"):
-        st.session_state.question_count = 6
-        st.session_state.rerun_after_question_count = True
-        st.stop()
+    st.session_state.question_count = 6
+    st.session_state.rerun_after_question_count = True
+    st.stop()
     if cols[1].button("12 Questions"):
-        st.session_state.question_count = 12
-        st.session_state.rerun_after_question_count = True
-        st.stop()
+    st.session_state.question_count = 12
+    st.session_state.rerun_after_question_count = True
+    st.stop()
     if cols[2].button("20 Questions"):
-        st.session_state.question_count = 20
-        st.session_state.rerun_after_question_count = True
-        st.stop()
+    st.session_state.question_count = 20
+    st.session_state.rerun_after_question_count = True
+    st.stop()
 
 elif not st.session_state.question_type:
     if not st.session_state.question_type_prompt:
@@ -133,9 +133,12 @@ elif not st.session_state.question_type:
         st.session_state.question_type_prompt = True
     cols = st.columns(3)
     if cols[0].button("Behavioral"): st.session_state.question_type = "behavioral"; st.experimental_rerun()
-    if cols[1].button("Technical"): st.session_state.question_type = "technical"; st.experimental_rerun()
-    if cols[2].button("Both"): st.session_state.question_type = "both"; st.experimental_rerun()
+    st.stop()
+if cols[1].button("Technical"): st.session_state.question_type = "technical"; st.experimental_rerun()
+    st.stop()
+if cols[2].button("Both"): st.session_state.question_type = "both"; st.experimental_rerun()
 
+st.stop()
 elif not st.session_state.job_description:
     if not st.session_state.job_description_prompt:
         maddie_says(f"Awesome, {st.session_state.name}! Please paste the job description below, and I’ll pull up your questions 📄")
@@ -184,18 +187,21 @@ else:
                 st.session_state.feedback = ""
                 st.session_state.user_answer = ""
                 st.experimental_rerun()
-        with col2:
+        st.stop()
+with col2:
             if index + 1 < total_qs:
                 if st.button("Next Question ➡️"):
                     st.session_state.question_index += 1
                     st.session_state.feedback = ""
                     st.session_state.user_answer = ""
                     st.experimental_rerun()
-            else:
+            st.stop()
+else:
                 if st.button("✅ Finish Interview"):
                     st.session_state.interview_complete = True
                     st.experimental_rerun()
 
+st.stop()
 if st.session_state.interview_complete:
     st.markdown("## 🎉 Interview Summary")
     for i, qa in enumerate(st.session_state.qa_summary, 1):
@@ -208,9 +214,13 @@ if st.session_state.interview_complete:
 if st.session_state.get("rerun_after_question_count"):
     st.session_state.rerun_after_question_count = False
     st.experimental_rerun()
+    st.stop()
+st.stop()
 if st.session_state.get("rerun_after_name"):
     st.session_state.rerun_after_name = False
     st.experimental_rerun()
+    st.stop()
+st.stop()
 
 if st.session_state.get("rerun_after_job"):
     with st.spinner("Maddie is reviewing the job description..."):
@@ -230,3 +240,4 @@ if st.session_state.get("rerun_after_job"):
         st.session_state.rerun_after_job = False
         st.success("✅ Questions are ready! Let's begin.")
         st.experimental_rerun()
+st.stop()
