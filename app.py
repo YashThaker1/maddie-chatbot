@@ -134,11 +134,11 @@ elif not st.session_state.question_type:
     cols = st.columns(3)
     if cols[0].button("Behavioral"): st.session_state.question_type = "behavioral"; st.experimental_rerun()
         st.stop()
-if cols[1].button("Technical"): st.session_state.question_type = "technical"; st.experimental_rerun()
+    if cols[1].button("Technical"): st.session_state.question_type = "technical"; st.experimental_rerun()
         st.stop()
-if cols[2].button("Both"): st.session_state.question_type = "both"; st.experimental_rerun()
-
-st.stop()
+    if cols[2].button("Both"): st.session_state.question_type = "both"; st.experimental_rerun()
+        st.stop()
+        
 elif not st.session_state.job_description:
     if not st.session_state.job_description_prompt:
         maddie_says(f"Awesome, {st.session_state.name}! Please paste the job description below, and I’ll pull up your questions 📄")
