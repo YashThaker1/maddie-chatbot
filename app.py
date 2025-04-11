@@ -198,9 +198,9 @@ else:
                     st.experimental_rerun()
             else:
 
-    if st.button("✅ Finish Interview"):
-        st.session_state.interview_complete = True
-        st.experimental_rerun()
+                if st.button("✅ Finish Interview"):
+                    st.session_state.interview_complete = True
+                    st.experimental_rerun()
 if st.session_state.interview_complete:
     st.markdown("## 🎉 Interview Summary")
     for i, qa in enumerate(st.session_state.qa_summary, 1):
