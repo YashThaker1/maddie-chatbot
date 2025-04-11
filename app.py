@@ -189,18 +189,20 @@ else:
                 st.session_state.feedback = ""
                 st.session_state.user_answer = ""
                 st.experimental_rerun()
-        st.stop()
-with col2:
-    if index + 1 < total_qs:
-        if st.button("Next Question ➡️"):
-            st.session_state.question_index += 1
-            st.session_state.feedback = ""
-            st.session_state.user_answer = ""
-            st.experimental_rerun()
-    else:
-        if st.button("✅ Finish Interview"):
-            st.session_state.interview_complete = True
-            st.experimental_rerun()
+        with col2:
+            if index + 1 < total_qs:
+                if st.button("Next Question ➡️"):
+                    st.session_state.question_index += 1
+                    st.session_state.feedback = ""
+                    st.session_state.user_answer = ""
+                    st.experimental_rerun()
+            else:
+                if st.button("✅ Finish Interview"):
+                    st.session_state.interview_complete = True
+                    st.experimental_rerun()
+    if st.button("✅ Finish Interview"):
+        st.session_state.interview_complete = True
+        st.experimental_rerun()
 if st.session_state.interview_complete:
     st.markdown("## 🎉 Interview Summary")
     for i, qa in enumerate(st.session_state.qa_summary, 1):
