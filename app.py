@@ -107,6 +107,7 @@ if not st.session_state.name:
         if submitted and name_input.strip():
             st.session_state.name = name_input.strip().title()
             st.session_state.rerun_after_name = True
+            st.stop()
 
 elif not st.session_state.question_count:
     if not st.session_state.question_count_prompt:
@@ -138,6 +139,7 @@ elif not st.session_state.job_description:
         if submitted and job_input.strip():
             st.session_state.job_description = job_input.strip()
             st.session_state.rerun_after_job = True
+            st.stop()
 
 else:
     index = st.session_state.question_index
@@ -197,6 +199,7 @@ if st.session_state.interview_complete:
 if st.session_state.get("rerun_after_name"):
     st.session_state.rerun_after_name = False
     st.experimental_rerun()
+    st.stop()
 
 if st.session_state.get("rerun_after_job"):
     with st.spinner("Maddie is reviewing the job description..."):
@@ -216,3 +219,4 @@ if st.session_state.get("rerun_after_job"):
         st.session_state.rerun_after_job = False
         st.success("✅ Questions are ready! Let's begin.")
         st.experimental_rerun()
+        st.stop()
