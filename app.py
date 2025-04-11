@@ -107,7 +107,6 @@ if not st.session_state.name:
         if submitted and name_input.strip():
             st.session_state.name = name_input.strip().title()
             st.session_state.rerun_after_name = True
-            st.stop()
 
 elif not st.session_state.question_count:
     if not st.session_state.question_count_prompt:
@@ -141,6 +140,20 @@ elif not st.session_state.question_type:
     if cols[2].button("Both"):
         st.session_state.question_type = "both"
         st.experimental_rerun()
+
+elif not st.session_state.job_description:
+    if not st.session_state.job_description_prompt:
+        maddie_says(f"Awesome, {st.session_state.name}! Please paste the job description below, and I’ll pull up your questions 📄")
+        st.session_state.job_description_prompt = True
+
+    with st.form("job_description_form"):
+        job_input = st.text_area("Paste the job description:", placeholder="Paste or write the job description here...")
+        submitted = st.form_submit_button("Next")
+
+        if submitted and job_input.strip():
+            st.session_state.job_description = job_input.strip()
+            st.session_state.rerun_after_job = True
+            st.stop()
 
 else:
     index = st.session_state.question_index
@@ -184,7 +197,7 @@ with col2:
             st.session_state.feedback = ""
             st.session_state.user_answer = ""
             st.experimental_rerun()
-else:
+    else:
     if st.button("✅ Finish Interview"):
         st.session_state.interview_complete = True
         st.experimental_rerun()
